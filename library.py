@@ -1,6 +1,10 @@
 import config
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
 
 def login (driver):
+    print ('>>login')
     elem = driver.find_element_by_link_text('Connexion')
     elem.click()
     username = driver.find_element_by_name("username")
@@ -12,11 +16,23 @@ def login (driver):
     submit.click()
 
 def logout (driver):
-    #elem = driver.find_element_by_link_text('Connexion')
-    #assert elem is null
+    print ('>>logout')
     url_logout = config.URL_PLATEFORM ['base_url'] + config.URL_PLATEFORM ['region'] + "/user/logout"
-    #logout_link = driver.find_element_by_xpath('//a[contains(@href, "%s")]' % href_logout)
-    #logout_link.click()
-    assert (driver.find_element_by_link_text('Connexion')) not in driver.page_source
-    driver.save_screenshot('/home/tgerbeau/Documents/screen_fail.png')
     driver.get (url_logout)
+    btn_connect = driver.find_element_by_link_text('Connexion')
+
+def setUp ():
+    driver = webdriver.Firefox(executable_path='/home/tgerbeau/Documents/geckodriver')
+    return driver
+
+def tearDown (driver):
+    driver.close()
+
+def screenshot (driver):
+    driver.save_screenshot('/home/tgerbeau/Documents/screenshot.png')
+
+def createDataSet (driver, region) :
+    url_create_dataset = config.URL_PLATEFORM ['base_url'] + region
+    driver.get (url_create_dataset) 
+    meta = driver.find_element_by_name("ginco_jdd[metadata_id]")
+    meta.send_keys(config.ID_METADONNEES['id'])

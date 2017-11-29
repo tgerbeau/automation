@@ -1,4 +1,5 @@
 import config
+import re
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
@@ -14,7 +15,7 @@ def login (driver):
     password.send_keys(config.USER_CREDENTIALS['password'])
     submit.click()
 
-    #add validation step
+    #TODO: add validation step
     print ('>>login')
 
 def logout (driver):
@@ -38,7 +39,7 @@ def createDataSet (driver, region) :
     url_create_dataset = config.URL_PLATEFORM ['base_url'] + region + config.URL_PLATEFORM ['create_dataset']
     driver.get (url_create_dataset)
     meta = driver.find_element_by_id("ginco_jdd_metadata_id")
-    meta.send_keys(config.ID_METADONNEES['id2'])
+    meta.send_keys(config.ID_METADONNEES['id3'])
     submit = driver.find_element_by_id("ginco_jdd_submit")
     submit.click()
 
@@ -49,7 +50,7 @@ def createDataSet (driver, region) :
     #page3
     #Uploading the test ".csv" file
     upload = driver.find_element_by_id("upload_data_file_observation")
-    upload.send_keys(r"/home/tgerbeau/Documents/automation/dee_test_mnhn.csv")
+    upload.send_keys(config.PATH_CSV_FILE ['csv_path'])
 
     srid = driver.find_element_by_id("upload_data_SRID")
     srid.send_keys(config.SRID['wgs84'])
@@ -60,5 +61,9 @@ def createDataSet (driver, region) :
 def checkImport (driver, region) :
     url_all_dataset = config.URL_PLATEFORM ['base_url'] + region + config.URL_PLATEFORM ['all_dataset']
     driver.get (url_all_dataset)
-    content = driver.find_element_by_class_name('btn btn-xs btn-default')
-    print (content.title)
+    content = driver.find_element_by_class_name('submission-line-lines')
+    text= str (content.text)
+    #remove parenthesis
+    s = re.sub(r'[^\w\s.]',"", text)
+    if int (s) == 0:
+        assert ("Import dataset has failed. 0 line imported.")

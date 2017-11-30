@@ -1,5 +1,6 @@
 import config
 import re
+import os
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
@@ -50,7 +51,9 @@ def createDataSet (driver, region) :
     #page3
     #Uploading the test ".csv" file
     upload = driver.find_element_by_id("upload_data_file_observation")
-    upload.send_keys(config.PATH_CSV_FILE ['csv_path'])
+    #relatif path from current working directory
+    cwd= os.getcwd()
+    upload.send_keys(cwd + config.CSV_FILENAME ['csv_filename'])
 
     srid = driver.find_element_by_id("upload_data_SRID")
     srid.send_keys(config.SRID['wgs84'])

@@ -21,6 +21,7 @@ def login (driver):
 
 def logout (driver):
     url_logout = config.URL_PLATEFORM ['base_url'] + config.URL_PLATEFORM ['region'] + "/user/logout"
+
     driver.get (url_logout)
     btn_connect = driver.find_element_by_link_text('Connexion')
     print ('>>logout')
@@ -35,23 +36,24 @@ def tearDown (driver):
 def screenshot (driver):
     driver.save_screenshot('/home/tgerbeau/Documents/screenshot.png')
 
-def createDataSet (driver, region) :
-    #page1
+def createDataSet (driver, region, id_metadata) :
+    # page1
     url_create_dataset = config.URL_PLATEFORM ['base_url'] + region + config.URL_PLATEFORM ['create_dataset']
+
     driver.get (url_create_dataset)
     meta = driver.find_element_by_id("ginco_jdd_metadata_id")
-    meta.send_keys(config.ID_METADONNEES['id3'])
+    meta.send_keys(id_metadata)
     submit = driver.find_element_by_id("ginco_jdd_submit")
     submit.click()
 
-    #page2
+    # page2
     submit = driver.find_element_by_id("ginco_data_submission_submit")
     submit.click()
 
-    #page3
-    #Uploading the test ".csv" file
+    # page3
+    # Uploading the test ".csv" file
     upload = driver.find_element_by_id("upload_data_file_observation")
-    #relatif path from current working directory
+    # Get the relative path from current working directory
     cwd= os.getcwd()
     upload.send_keys(cwd + config.CSV_FILENAME ['csv_filename'])
 
@@ -61,12 +63,25 @@ def createDataSet (driver, region) :
     submit = driver.find_element_by_id("upload_data_submit")
     submit.click()
 
-def checkImport (driver, region) :
-    url_all_dataset = config.URL_PLATEFORM ['base_url'] + region + config.URL_PLATEFORM ['all_dataset']
+def checkImport (driver, url_all_dataset) :
+
     driver.get (url_all_dataset)
     content = driver.find_element_by_class_name('submission-line-lines')
     text= str (content.text)
-    #remove parenthesis
+    # Remove parenthesis from string
     s = re.sub(r'[^\w\s.]',"", text)
     if int (s) == 0:
         assert ("Import dataset has failed. 0 line imported.")
+
+def removeDataSet (driver, url_all_dataset , id_metadata) :
+    # Go on jdd/all page
+    driver.get (url_all_dataset)
+
+    # Remove all previous imports for the given ID_METADATA
+    # while (content is not NULL)
+
+    # Remove the general data set
+    content = driver.find_element_by_xpath("//BUTTON[@class='btn btn-xs btn-default btn-disabled']/self::BUTTON")
+    content.click()
+
+    # All is clean, you can run createDataSet() function

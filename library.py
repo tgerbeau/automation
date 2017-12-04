@@ -77,17 +77,25 @@ def checkImport (driver, url_all_dataset) :
 def removeDataSet (driver, url_all_dataset , id_metadata) :
     # Go on jdd/all page
     driver.get (url_all_dataset)
-
-    # Remove all previous imports for the given ID_METADATA
-    try:
-        btn_cancel_submission = driver.find_element_by_xpath("//*[@title='Annuler la soumission']")
-        btn_cancel_submission.click()
-        # Catch the popup alert Yes button
-        alert = driver.switch_to.alert.accept()
-
+    empty_dataset = False
+    empty_imports = False
+    while empty_dataset is not True:
         # Remove the general data set (main delete button)
-        content = driver.find_element_by_xpath("//SPAN[@class='glyphicon glyphicon-remove']")
-        content.click()
-        print (">> removeDataSet(): Previous imports have been correctly erased.")
-    except:
-        print (">> removeDataSet(): Nothing to clean.")
+        try:
+            content = driver.find_element_by_xpath("//SPAN[@class='glyphicon glyphicon-remove']")
+            while empty_imports is not True:
+                try:
+                    btn_cancel_submission = driver.find_element_by_xpath("//*[@title='Annuler la soumission']")
+                    btn_cancel_submission.click()
+                    # Catch the popup alert Yes button
+                    alert = driver.switch_to.alert.accept()
+                except:
+                    empty_imports = True
+                    # Remove the general data set (main delete button)
+                    content.click()
+                    # Catch the popup alert "Continuer" button
+                    alert = driver.switch_to.alert.accept()
+                    print (">> removeDataSet(): Previous imports have been correctly erased.")
+        except:
+            empty_dataset = True
+            print (">> removeDataSet(): Goodness, nothing to clean.")

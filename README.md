@@ -2,7 +2,7 @@
 
 You will find here all the code to automate critical parts of GINCO/SINP web application.
 
-<library.py> contains all functions used  
+_library.py_ contains all functions used  
 
 * If any parameter is given, "dailybuild" region will be the default region.  
 

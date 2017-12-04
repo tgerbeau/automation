@@ -1,6 +1,7 @@
 import config
 import re
 import os
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
@@ -78,10 +79,15 @@ def removeDataSet (driver, url_all_dataset , id_metadata) :
     driver.get (url_all_dataset)
 
     # Remove all previous imports for the given ID_METADATA
-    # while (content is not NULL)
+    try:
+        btn_cancel_submission = driver.find_element_by_xpath("//*[@title='Annuler la soumission']")
+        btn_cancel_submission.click()
+        # Catch the popup alert Yes button
+        alert = driver.switch_to.alert.accept()
 
-    # Remove the general data set
-    content = driver.find_element_by_xpath("//BUTTON[@class='btn btn-xs btn-default btn-disabled']/self::BUTTON")
-    content.click()
-
-    # All is clean, you can run createDataSet() function
+        # Remove the general data set (main delete button)
+        content = driver.find_element_by_xpath("//SPAN[@class='glyphicon glyphicon-remove']")
+        content.click()
+        print (">> removeDataSet(): Previous imports have been correctly erased.")
+    except:
+        print (">> removeDataSet(): Nothing to clean.")

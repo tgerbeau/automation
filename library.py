@@ -1,4 +1,5 @@
 import config
+import credentials
 import re
 import os
 
@@ -13,8 +14,8 @@ def login (driver):
     password = driver.find_element_by_name("password")
     submit = driver.find_element_by_name("submit")
 
-    username.send_keys(config.USER_CREDENTIALS['username'])
-    password.send_keys(config.USER_CREDENTIALS['password'])
+    username.send_keys(credentials.USER_CREDENTIALS['username'])
+    password.send_keys(credentials.USER_CREDENTIALS['password'])
     submit.click()
 
     #TODO: add validation step

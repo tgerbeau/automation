@@ -1,10 +1,12 @@
-# GINCO/SINP Automation (Python + Selenium WebDriver) 
+# GINCO/SINP Automation Project 
 
 You will find here the code to automate several critical parts of GINCO/SINP web application.
+Python + Selenium WebDriver
+
 
 - _library.py_ contains all functions 
-- _config.py_ contains credentials, urls for platforms, metadata ids, csv filenames    
--
+- _config.py_ contains credentials, urls for platforms, metadata ids, csv files used to run our tests    
+- _main.py_  
 
 ###### How to set up:
 

@@ -11,10 +11,17 @@ You will find here the code to automate several critical parts of GINCO/SINP web
 
 ## How to set up:
 
-- [ ] Install Python (or check if already installed)  
+main steps:
+
+- [ ] Install Python (or check if already installed)
+- [ ] Download geckodriver https://github.com/mozilla/geckodriver/releases 
+- [ ] Move "geckodriver" into /usr/local/bin 
 - [ ] Install Selenium ```pip install selenium```
 - [ ] Checkout the "automation" repository 
 - [ ] Add your own credentials into _config.py_
+
+
+You can also find help here http://selenium-python.readthedocs.io/installation.html
 
 ## How to run automation:
 

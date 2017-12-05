@@ -1,8 +1,4 @@
-USER_CREDENTIALS = {
-    'username': '',
-    'password': ''
-}
-URL_PLATEFORM = {
+URL_PLATFORM = {
     'base_url' : 'https://ginco.naturefrance.fr/',
     'default_region' : 'dailybuild/',
     'create_dataset' : 'jdd/new',

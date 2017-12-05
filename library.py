@@ -29,7 +29,7 @@ def logout (driver):
     print ('>>logout')
 
 def setUp ():
-    driver = webdriver.Firefox(executable_path='/home/tgerbeau/Documents/geckodriver')
+    driver = webdriver.Firefox()
     return driver
 
 def tearDown (driver):

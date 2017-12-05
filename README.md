@@ -5,7 +5,8 @@ Python + Selenium WebDriver.
 You will find here the code to automate several critical parts of GINCO/SINP web application.
 
 - _library.py_ contains all functions 
-- _config.py_ contains credentials, urls for platforms, metadata ids, csv files used to run our tests    
+- _config.py_ contains urls for platforms, metadata ids, csv files used to run our tests    
+- _credentials.py_ will contain credentials we need to set to run our tests      
 - _main.py_  
 
 ## How to set up:

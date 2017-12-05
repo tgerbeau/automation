@@ -8,17 +8,17 @@ driver = library.setUp()
 
 # If any region is given in parameter, default region = dailybuild
 if len(sys.argv) == 1:
-    region = config.URL_PLATEFORM['default_region']
+    region = config.URL_PLATFORM['default_region']
 else:
     region = sys.argv[1] + "/"
 
-driver.get (config.URL_PLATEFORM ['base_url'] + region)
+driver.get (config.URL_PLATFORM ['base_url'] + region)
 
 # Choose one metadata which will be used for your data set import
 id_metadata = config.ID_METADATA['id3']
 
 # Built url to access to all dataset list
-url_all_dataset = config.URL_PLATEFORM ['base_url'] + region + config.URL_PLATEFORM ['all_dataset']
+url_all_dataset = config.URL_PLATFORM ['base_url'] + region + config.URL_PLATFORM ['all_dataset']
 
 library.login(driver)
 # Clean previous import(s) using the same metadata id

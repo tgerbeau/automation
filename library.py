@@ -21,7 +21,7 @@ def login (driver):
     print ('>>login')
 
 def logout (driver):
-    url_logout = config.URL_PLATEFORM ['base_url'] + config.URL_PLATEFORM ['region'] + "/user/logout"
+    url_logout = config.URL_PLATFORM ['base_url'] + config.URL_PLATFORM ['region'] + "/user/logout"
 
     driver.get (url_logout)
     btn_connect = driver.find_element_by_link_text('Connexion')
@@ -39,7 +39,7 @@ def screenshot (driver):
 
 def createDataSet (driver, region, id_metadata) :
     # page1
-    url_create_dataset = config.URL_PLATEFORM ['base_url'] + region + config.URL_PLATEFORM ['create_dataset']
+    url_create_dataset = config.URL_PLATFORM ['base_url'] + region + config.URL_PLATFORM ['create_dataset']
 
     driver.get (url_create_dataset)
     meta = driver.find_element_by_id("ginco_jdd_metadata_id")

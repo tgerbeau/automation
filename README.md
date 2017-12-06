@@ -15,10 +15,12 @@ main steps:
 
 - [ ] Install Python (or check if already installed)
 - [ ] Download geckodriver https://github.com/mozilla/geckodriver/releases 
-- [ ] Move "geckodriver" into /usr/local/bin 
+- [ ] Move "geckodriver" into ```/usr/local/bin``` 
 - [ ] Install Selenium ```pip install selenium```
 - [ ] Checkout the "automation" repository 
 - [ ] Add your own credentials into _config.py_
+- [ ] Add your .csv file into "automation" repository with this name: "dee_test_mnhn.csv"  
+
 
 
 You can also find help here http://selenium-python.readthedocs.io/installation.html

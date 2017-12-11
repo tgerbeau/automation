@@ -1,4 +1,4 @@
 USER_CREDENTIALS = {
-    'username': '',
-    'password': ''
+    'username': 'tgerbeau',
+    'password': 'NQ3y8yDJcXk9'
 }

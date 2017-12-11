@@ -2,7 +2,8 @@ URL_PLATFORM = {
     'base_url' : 'https://ginco.naturefrance.fr/',
     'default_region' : 'dailybuild/',
     'create_dataset' : 'jdd/new',
-    'all_dataset' : 'jdd/all'
+    'all_dataset' : 'jdd/all',
+    'user' : 'user/'
 }
 ID_METADATA = {
     'id' : '4A9DDA1F-B6F8-3E13-EO53-2614A8C02B7C',

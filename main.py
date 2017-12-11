@@ -1,4 +1,3 @@
-
 import sys
 import library
 import config
@@ -20,7 +19,7 @@ id_metadata = config.ID_METADATA['id3']
 # Built url to access to all dataset list
 url_all_dataset = config.URL_PLATFORM ['base_url'] + region + config.URL_PLATFORM ['all_dataset']
 
-library.login(driver)
+library.login(driver, region)
 # Clean previous import(s) using the same metadata id
 library.removeDataSet(driver, url_all_dataset, id_metadata)
 

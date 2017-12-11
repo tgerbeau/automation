@@ -7,7 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-def login (driver):
+def login (driver, region):
     elem = driver.find_element_by_link_text('Connexion')
     elem.click()
     username = driver.find_element_by_name("username")
@@ -18,8 +18,11 @@ def login (driver):
     password.send_keys(credentials.USER_CREDENTIALS['password'])
     submit.click()
 
-    #TODO: add validation step
-    print ('>>login')
+    # Check if we are connected to the app
+    driver.get (config.URL_PLATFORM ['base_url'] + region + config.URL_PLATFORM ['user'])
+    title = driver.find_element_by_xpath("//H1[text()='Votre compte']")
+    assert (title)
+
 
 def logout (driver):
     url_logout = config.URL_PLATFORM ['base_url'] + config.URL_PLATFORM ['region'] + "/user/logout"
@@ -78,28 +81,20 @@ def checkImport (driver, url_all_dataset) :
 def removeDataSet (driver, url_all_dataset , id_metadata) :
     # Go on jdd/all page
     driver.get (url_all_dataset)
+    driver.get (url_all_dataset)
 
-    # Check if the given id_metadata is present on the page
-    metadata = driver.find_element_by_css_selector("span.text-muted.longtext")
-    id_existing = str (metadata.text)
-
+    # Use searching bar with given id_metadata
     search = driver.find_element_by_css_selector('input.form-control')
-    search.send_keys(id_existing)
+    search.send_keys(id_metadata)
 
-    if id_metadata == id_existing:
-        # Clean all imports
-        empty_imports = False
-        while empty_imports is not True:
-            try:
-                btn_cancel_submission = driver.find_element_by_xpath("//*[@title='Annuler la soumission']")
-                btn_cancel_submission.click()
-                # Catch the popup alert Yes button
-                alert = driver.switch_to.alert.accept()
-            except:
-                empty_imports = True
-        # Clean the general data set (main delete button)
-        content = driver.find_element_by_css_selector("span.glyphicon.glyphicon-remove")
-        content.click()
-        # Catch the popup alert "Continuer" button
-        alert = driver.switch_to.alert.accept()
-        print (">> removeDataSet(): Previous imports have been correctly erased.")
+    # Get all the metadata elements in page
+    elements = driver.find_elements_by_css_selector("span.text-muted.longtext")
+    # //*[@id="integration-cancel-link-131"]/span
+    # //*[@id="jddTable"]/tbody/tr[1]
+    # Check if id_metadata is on the list of elements
+    for ii in elements:
+        print (ii.text)
+        if (id_metadata == ii.text):
+            print ("Same metadata found")
+            # Clean all imports
+            empty_imports = False

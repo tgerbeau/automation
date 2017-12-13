@@ -5,6 +5,9 @@ import os
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def login (driver, region):
@@ -20,8 +23,11 @@ def login (driver, region):
 
     # Check if we are connected to the app
     driver.get (config.URL_PLATFORM ['base_url'] + region + config.URL_PLATFORM ['user'])
-    title = driver.find_element_by_xpath("//H1[text()='Votre compte']")
-    assert (title)
+    try:
+        element = WebDriverWait(driver, 100).until(
+        EC.presence_of_element_located((By.XPATH, "//H1[text()='Votre compte']")))
+    except:
+        print ("Element h1 not found")
 
 
 def logout (driver):
@@ -78,6 +84,12 @@ def checkImport (driver, url_all_dataset) :
     if int (s) == 0:
         assert ("Import dataset has failed. 0 line imported.")
 
+def removeSubmission (driver, submission_array) :
+    for submission_link in submission_array:
+        print submission_link
+        driver.get (submission_link)
+
+
 def removeDataSet (driver, url_all_dataset , id_metadata) :
     # Go on jdd/all page
     driver.get (url_all_dataset)
@@ -89,6 +101,7 @@ def removeDataSet (driver, url_all_dataset , id_metadata) :
     # Get all the metadata elements in page
     elements = driver.find_elements_by_css_selector("span.text-muted.longtext")
     i=1
+    urlToClean = []
     for ii in elements:
         # Check if id_metadata is on the list of elements
         if (id_metadata == ii.text):
@@ -96,21 +109,20 @@ def removeDataSet (driver, url_all_dataset , id_metadata) :
             empty_imports = False
             while empty_imports is False:
                 try:
+                    # //*[@id="jddTable"]/tbody/tr/td[4]/div[1]/div
                     str_xpath = "//*[@id=\"jddTable\"]/tbody/tr[" + str (i) + "]/td[5]/div/div/a[2]"
-                    btn_cancel_submission = driver.find_element_by_xpath(str_xpath)
-                    btn_cancel_submission.click()
-                    # Catch the popup alert Yes button
-                    alert = driver.switch_to.alert.accept()
-                    # Page reloading
-                    # driver.get (url_all_dataset)
-                except:
+                    tab = driver.find_elements_by_xpath(str_xpath)
+                    for z in tab:
+                        urlToClean.append (z.get_attribute("href"))
                     empty_imports = True
-                    # Clean the general data set (main delete button)
-                    str_xpath_remove = "//*[@id=\"jddTable\"]/tbody/tr[" + str (i) + "]/td[1]/button/span"
-                    btn_cancel_submission = driver.find_element_by_xpath(str_xpath_remove)
-                    btn_cancel_submission.click()
-                    # Catch the popup alert, click on "Continuer" button
-                    btn_continuer = driver.find_element_by_link_text('Continuer')
-                    btn_continuer.click()
-                    print (">> removeDataSet(): Previous imports have been correctly removed.")
-        i= i + 1
+                except:
+                    i=i+1
+
+    removeSubmission (driver, urlToClean)
+    # Clean the general data set (main delete button)
+    str_xpath_remove = "//*[@id=\"jddTable\"]/tbody/tr[" + str (i) + "]/td[1]/button/span"
+    btn_cancel_submission = driver.find_element_by_xpath(str_xpath_remove)
+    btn_cancel_submission.click()
+    # Catch the popup alert, click on "Continuer" button
+    btn_continuer = driver.find_element_by_link_text('Continuer')
+    btn_continuer.click()

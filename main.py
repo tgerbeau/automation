@@ -14,7 +14,7 @@ else:
 driver.get (config.URL_PLATFORM ['base_url'] + region)
 
 # Choose one metadata which will be used for your data set import
-id_metadata = config.ID_METADATA['id3']
+id_metadata = config.ID_METADATA['id']
 
 # Built url to access to all dataset list
 url_all_dataset = config.URL_PLATFORM ['base_url'] + region + config.URL_PLATFORM ['all_dataset']
@@ -34,3 +34,4 @@ library.removeDataSet(driver, url_all_dataset, id_metadata)
 
 # library.logout(driver)
 library.tearDown(driver)
+driver.quit()

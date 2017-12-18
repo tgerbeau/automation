@@ -13,6 +13,9 @@ ID_METADATA = {
 CSV_FILENAME = {
     'csv_filename' : '/dee_test_mnhn.csv',
 }
+DATAMODEL_NAME = {
+    'data_model_name' : 'Occ_Taxon_DSR_exemple',
+}
 SRID = {
     'wgs84' : '4326'
 }

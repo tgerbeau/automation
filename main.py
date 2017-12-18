@@ -14,9 +14,9 @@ else:
 driver.get (config.URL_PLATFORM ['base_url'] + region)
 
 # Choose one metadata which will be used for your data set import
-id_metadata = config.ID_METADATA['id']
+id_metadata = config.ID_METADATA['id2']
 
-# Built url to access to all dataset list
+# Built url to access all dataset list
 url_all_dataset = config.URL_PLATFORM ['base_url'] + region + config.URL_PLATFORM ['all_dataset']
 
 library.login(driver, region)

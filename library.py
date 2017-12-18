@@ -21,13 +21,17 @@ def login (driver, region):
     password.send_keys(credentials.USER_CREDENTIALS['password'])
     submit.click()
 
+    # wait = WebDriverWait(driver, 10)
+    # wait.until(EC.url_changes(config.URL_PLATFORM ['base_url'] + region))
+
     # Check if we are connected to the app
     driver.get (config.URL_PLATFORM ['base_url'] + region + config.URL_PLATFORM ['user'])
     try:
-        element = WebDriverWait(driver, 100).until(
+        element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//H1[text()='Votre compte']")))
     except:
         print ("Element h1 not found")
+        driver.quit()
 
 
 def logout (driver):
@@ -89,40 +93,52 @@ def removeSubmission (driver, submission_array) :
         print submission_link
         driver.get (submission_link)
 
+def removeMainDataset (driver, tab, id_metadata) :
+
+    elements = driver.find_elements_by_css_selector("span.text-muted.longtext")
+    i=1
+    for ii in elements:
+        # Check if id_metadata is on the list of elements
+        if (id_metadata == ii.text):
+            str_xpath_remove = "//*[@id=\"jddTable\"]/tbody/tr[" + str(i) + "]/td[1]/button/span"
+            btn_cancel_submission = driver.find_element_by_xpath(str_xpath_remove)
+            btn_cancel_submission.click()
+            # Catch the popup alert, click on "Continuer" button
+            btn_continuer = driver.find_element_by_link_text('Continuer')
+            btn_continuer.click()
+        i = i+1
 
 def removeDataSet (driver, url_all_dataset , id_metadata) :
     # Go on jdd/all page
     driver.get (url_all_dataset)
 
-    # Use searching bar with given id_metadata
-    #search = driver.find_element_by_css_selector('input.form-control')
-    #search.send_keys(id_metadata)
-
-    # Get all the metadata elements in page
-    elements = driver.find_elements_by_css_selector("span.text-muted.longtext")
-    i=1
-    urlToClean = []
-    for ii in elements:
-        # Check if id_metadata is on the list of elements
-        if (id_metadata == ii.text):
-            # Clean all imports
-            empty_imports = False
-            while empty_imports is False:
+    try:
+        # Get all the metadata elements in page
+        elements = driver.find_elements_by_css_selector("span.text-muted.longtext")
+        i=1
+        # Submission link(s) tab
+        urlToClean = []
+        # Index
+        #tabIndex = []
+        for ii in elements:
+            # Check if id_metadata is on the list of elements
+            if (id_metadata == ii.text):
+                # matching imports are set in tab
                 try:
                     # //*[@id="jddTable"]/tbody/tr/td[4]/div[1]/div
                     str_xpath = "//*[@id=\"jddTable\"]/tbody/tr[" + str (i) + "]/td[5]/div/div/a[2]"
                     tab = driver.find_elements_by_xpath(str_xpath)
+                    #tabIndex.append (int (i))
                     for z in tab:
                         urlToClean.append (z.get_attribute("href"))
-                    empty_imports = True
                 except:
-                    i=i+1
+                    pass
+            i = i +1
+        # Clean all submissionLinks collected
+        removeSubmission (driver, urlToClean)
+        # Clean the general data set (main delete button)
+        removeMainDataset (driver, tab, id_metadata)
 
-    removeSubmission (driver, urlToClean)
-    # Clean the general data set (main delete button)
-    str_xpath_remove = "//*[@id=\"jddTable\"]/tbody/tr[" + str (i) + "]/td[1]/button/span"
-    btn_cancel_submission = driver.find_element_by_xpath(str_xpath_remove)
-    btn_cancel_submission.click()
-    # Catch the popup alert, click on "Continuer" button
-    btn_continuer = driver.find_element_by_link_text('Continuer')
-    btn_continuer.click()
+    except:
+        print (">> Great ! there is nothing to clean in previous import(s)")
+        

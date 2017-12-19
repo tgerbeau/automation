@@ -8,6 +8,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
 
 
 def login (driver, region):
@@ -59,7 +60,9 @@ def createDataSet (driver, region, id_metadata) :
 
     # Select one data model to run your test
     # Note that the name can be different from one platfrom to another
-    driver.find_element_by_id("ginco_jdd_model").send_keys(config.DATAMODEL_NAME ['data_model_name'])
+    model = Select (driver.find_element_by_id("ginco_jdd_model"))
+    model.select_by_visible_text(config.DATAMODEL_NAME ['data_model_name'])
+
 
     meta = driver.find_element_by_id("ginco_jdd_metadata_id")
     meta.send_keys(id_metadata)
@@ -102,10 +105,11 @@ def removeMainDataset (driver, tab, id_metadata) :
 
     # TO DO : //*[@id="jddTable"]/tbody/tr[1]/td[9]/div/div/a[3]/span
     # Check if DEE transmission is not made before process cleaning
-
+    print ("removeMainDataSet")
     elements = driver.find_elements_by_css_selector("span.text-muted.longtext")
     i=1
     for ii in elements:
+        print (ii.text)
         # Check if id_metadata is on the list of elements
         if (id_metadata == ii.text):
             str_xpath_remove = "//*[@id=\"jddTable\"]/tbody/tr[" + str(i) + "]/td[1]/button/span"
@@ -142,10 +146,9 @@ def removeDataSet (driver, url_all_dataset , id_metadata) :
                 except:
                     pass
             i = i +1
+    except:
+        print ("here in the except")
         # Clean all submissionLinks collected
         removeSubmission (driver, urlToClean)
         # Clean the general data set (main delete button)
         removeMainDataset (driver, tab, id_metadata)
-
-    except:
-        print (">> Great ! there is nothing to clean in previous import(s)")

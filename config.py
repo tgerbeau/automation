@@ -3,6 +3,7 @@ URL_PLATFORM = {
     'default_region' : 'dailybuild/',
     'create_dataset' : 'jdd/new',
     'all_dataset' : 'jdd/all',
+    'my_dataset' : 'jdd',
     'user' : 'user/'
 }
 ID_METADATA = {
@@ -15,6 +16,7 @@ CSV_FILENAME = {
 }
 DATAMODEL_NAME = {
     'data_model_name' : 'Occ_Taxon_DSR_exemple',
+    'data_submission_dataset' : 'Occ_Taxon_DSR_exemple_import'
 }
 SRID = {
     'wgs84' : '4326'

@@ -18,6 +18,7 @@ id_metadata = config.ID_METADATA['id2']
 
 # Built url to access all dataset list
 url_all_dataset = config.URL_PLATFORM ['base_url'] + region + config.URL_PLATFORM ['all_dataset']
+url_my_dataset = config.URL_PLATFORM ['base_url'] + region + config.URL_PLATFORM ['my_dataset']
 
 library.login(driver, region)
 # Clean previous import(s) using the same metadata id
@@ -27,7 +28,7 @@ library.removeDataSet(driver, url_all_dataset, id_metadata)
 library.createDataSet(driver, region, id_metadata)
 
 # Check that the nblines imported are not null
-library.checkImport(driver, url_all_dataset)
+library.checkImport(driver, url_my_dataset)
 
 # Clean previous import(s) using the same metadata id
 library.removeDataSet(driver, url_all_dataset, id_metadata)

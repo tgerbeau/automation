@@ -70,6 +70,8 @@ def createDataSet (driver, region, id_metadata) :
     submit.click()
 
     # page2
+    model = Select (driver.find_element_by_id("ginco_data_submission_dataset"))
+    model.select_by_visible_text(config.DATAMODEL_NAME ['data_submission_dataset'])
     submit = driver.find_element_by_id("ginco_data_submission_submit")
     submit.click()
 
@@ -86,11 +88,16 @@ def createDataSet (driver, region, id_metadata) :
     submit = driver.find_element_by_id("upload_data_submit")
     submit.click()
 
-def checkImport (driver, url_all_dataset) :
+    # Explicit wait until page jdd is loaded
+    wait = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.CLASS_NAME, 'submission-line-lines')))
 
-    driver.get (url_all_dataset)
+def checkImport (driver, url_my_dataset) :
+    print (">> checkImport ()")
+    driver.get (url_my_dataset)
     content = driver.find_element_by_class_name('submission-line-lines')
     text= str (content.text)
+    print (content.text)
     # Remove parenthesis from string
     s = re.sub(r'[^\w\s.]',"", text)
     if int (s) == 0:
@@ -101,11 +108,11 @@ def removeSubmission (driver, submission_array) :
         print submission_link
         driver.get (submission_link)
 
-def removeMainDataset (driver, tab, id_metadata) :
+def removeEntireDataSet (driver, id_metadata) :
 
     # TO DO : //*[@id="jddTable"]/tbody/tr[1]/td[9]/div/div/a[3]/span
     # Check if DEE transmission is not made before process cleaning
-    print ("removeMainDataSet")
+    print (">> removeEntireDataSet")
     elements = driver.find_elements_by_css_selector("span.text-muted.longtext")
     i=1
     for ii in elements:
@@ -116,14 +123,17 @@ def removeMainDataset (driver, tab, id_metadata) :
             btn_cancel_submission = driver.find_element_by_xpath(str_xpath_remove)
             btn_cancel_submission.click()
             # Catch the popup alert, click on "Continuer" button
+            wait = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.LINK_TEXT, "Continuer")))
             btn_continuer = driver.find_element_by_link_text('Continuer')
             btn_continuer.click()
+            elements = driver.find_elements_by_css_selector("span.text-muted.longtext")
+
         i = i+1
 
 def removeDataSet (driver, url_all_dataset , id_metadata) :
     # Go on jdd/all page
     driver.get (url_all_dataset)
-
     try:
         # Get all the metadata elements in page
         elements = driver.find_elements_by_css_selector("span.text-muted.longtext")
@@ -147,8 +157,9 @@ def removeDataSet (driver, url_all_dataset , id_metadata) :
                     pass
             i = i +1
     except:
-        print ("here in the except")
-        # Clean all submissionLinks collected
-        removeSubmission (driver, urlToClean)
-        # Clean the general data set (main delete button)
-        removeMainDataset (driver, tab, id_metadata)
+         print (">> No previous import(s) to clean")
+
+    # Clean all submissionLinks collected
+    removeSubmission (driver, urlToClean)
+    # Clean the general data set (main delete button)
+    removeEntireDataSet (driver, id_metadata)

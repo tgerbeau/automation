@@ -16,7 +16,9 @@ CSV_FILENAME = {
 }
 DATAMODEL_NAME = {
     'data_model_name' : 'Occ_Taxon_DSR_exemple',
-    'data_submission_dataset' : 'Occ_Taxon_DSR_exemple_import'
+    'data_submission_dataset' : 'Occ_Taxon_DSR_exemple_import',
+    'dailybuild_data_model_name' : 'Occ_Taxon_DSR_1.2.1',
+    'dailybuild_data_submission_dataset' : 'Occ_Taxon_DSR_import_CSV'
 }
 SRID = {
     'wgs84' : '4326'

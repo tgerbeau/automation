@@ -2,6 +2,7 @@ import config
 import credentials
 import re
 import os
+import logging as log
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -93,15 +94,30 @@ def createDataSet (driver, region, id_metadata) :
     EC.presence_of_element_located((By.CLASS_NAME, 'submission-line-lines')))
 
 def checkImport (driver, url_my_dataset) :
-    print (">> checkImport ()")
-    driver.get (url_my_dataset)
-    content = driver.find_element_by_class_name('submission-line-lines')
-    text= str (content.text)
-    print (content.text)
+    log.info(">> checkImport ()")
+
+    # span.glyphicon.glyphicon-ok.color-success
+    # glyphicon glyphicon-play
+    # wait = WebDriverWait(driver, 20).until(
+    # EC.presence_of_element_located((By.CLASS_NAME, 'a.btn.btn-xs.btn-success')))
+    # "//*[@id=\"jddTable\"]/tbody/tr[" + str(i) + "]/td[1]/button/span"
+    # publish = driver.find_element_by_xpath('//*[@id="jddTable"]/tbody/tr/td[4]/div/div/a[1]')
+
+    # Wait until the tick icon is displayed
+    wait = WebDriverWait(driver, 20).until(
+    EC.presence_of_element_located((By.XPATH, '//*[@id="jddTable"]/tbody/tr/td[6]/div/div[3]/span')))
+
+    # find the publish button
+    publish = driver.find_element_by_xpath('//*[@id="jddTable"]/tbody/tr/td[4]/div/div/a[1]')
+    # publish.click()
+
+    lines_imported = driver.find_element_by_class_name('submission-line-lines')
+    text= str (lines_imported.text)
+
     # Remove parenthesis from string
     s = re.sub(r'[^\w\s.]',"", text)
     if int (s) == 0:
-        assert ("Import dataset has failed. 0 line imported.")
+         log.error (">> Import dataset has failed. 0 line imported.")
 
 def removeSubmission (driver, submission_array) :
     for submission_link in submission_array:
@@ -112,7 +128,8 @@ def removeEntireDataSet (driver, id_metadata) :
 
     # TO DO : //*[@id="jddTable"]/tbody/tr[1]/td[9]/div/div/a[3]/span
     # Check if DEE transmission is not made before process cleaning
-    print (">> removeEntireDataSet")
+    log.info(">> removeEntireDataSet")
+    str_xpath_remove = ""
     elements = driver.find_elements_by_css_selector("span.text-muted.longtext")
     i=1
     for ii in elements:
@@ -120,16 +137,17 @@ def removeEntireDataSet (driver, id_metadata) :
         # Check if id_metadata is on the list of elements
         if (id_metadata == ii.text):
             str_xpath_remove = "//*[@id=\"jddTable\"]/tbody/tr[" + str(i) + "]/td[1]/button/span"
-            btn_cancel_submission = driver.find_element_by_xpath(str_xpath_remove)
-            btn_cancel_submission.click()
-            # Catch the popup alert, click on "Continuer" button
-            wait = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.LINK_TEXT, "Continuer")))
-            btn_continuer = driver.find_element_by_link_text('Continuer')
-            btn_continuer.click()
-            elements = driver.find_elements_by_css_selector("span.text-muted.longtext")
 
         i = i+1
+
+    if str_xpath_remove != "":
+        btn_cancel_submission = driver.find_element_by_xpath(str_xpath_remove)
+        btn_cancel_submission.click()
+        # Catch the popup alert, click on "Continuer" button
+        wait = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.LINK_TEXT, "Continuer")))
+        btn_continuer = driver.find_element_by_link_text('Continuer')
+        btn_continuer.click()
 
 def removeDataSet (driver, url_all_dataset , id_metadata) :
     # Go on jdd/all page

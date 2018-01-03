@@ -36,9 +36,8 @@ def login (driver, region):
         driver.quit()
 
 
-def logout (driver):
-    url_logout = config.URL_PLATFORM ['base_url'] + config.URL_PLATFORM ['region'] + "/user/logout"
-
+def logout (driver, region):
+    url_logout = config.URL_PLATFORM ['base_url'] + region + "/user/logout"
     driver.get (url_logout)
     btn_connect = driver.find_element_by_link_text('Connexion')
     print ('>>logout')
@@ -49,7 +48,7 @@ def setUp ():
 
 def tearDown (driver):
     driver.close()
-
+    
 def screenshot (driver):
     driver.save_screenshot('/screenshot.png')
 

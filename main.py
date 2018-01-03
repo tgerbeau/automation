@@ -33,6 +33,5 @@ library.checkImport(driver, url_my_dataset)
 # Clean previous import(s) using the same metadata id
 library.removeDataSet(driver, url_all_dataset, id_metadata)
 
-# library.logout(driver)
+library.logout(driver, region)
 library.tearDown(driver)
-driver.quit()

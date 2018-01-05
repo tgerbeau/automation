@@ -48,7 +48,7 @@ def setUp ():
 
 def tearDown (driver):
     driver.close()
-    
+
 def screenshot (driver):
     driver.save_screenshot('/screenshot.png')
 
@@ -58,11 +58,18 @@ def createDataSet (driver, region, id_metadata) :
 
     driver.get (url_create_dataset)
 
+    # Set section names depending on virt_env
+    if region != "dailybuild/":
+        str_data_model = config.DATAMODEL_NAME ['data_model_name']
+        str_data_submision = config.DATAMODEL_NAME ['data_submission_dataset']
+    else:
+        str_data_model = config.DATAMODEL_NAME ['dailybuild_data_model_name']
+        str_data_submision = config.DATAMODEL_NAME ['dailybuild_data_submission_dataset']
+
     # Select one data model to run your test
     # Note that the name can be different from one platfrom to another
     model = Select (driver.find_element_by_id("ginco_jdd_model"))
-    model.select_by_visible_text(config.DATAMODEL_NAME ['data_model_name'])
-
+    model.select_by_visible_text(str_data_model)
 
     meta = driver.find_element_by_id("ginco_jdd_metadata_id")
     meta.send_keys(id_metadata)
@@ -71,7 +78,7 @@ def createDataSet (driver, region, id_metadata) :
 
     # page2
     model = Select (driver.find_element_by_id("ginco_data_submission_dataset"))
-    model.select_by_visible_text(config.DATAMODEL_NAME ['data_submission_dataset'])
+    model.select_by_visible_text(str_data_submision)
     submit = driver.find_element_by_id("ginco_data_submission_submit")
     submit.click()
 
@@ -103,7 +110,7 @@ def checkImport (driver, url_my_dataset) :
     # publish = driver.find_element_by_xpath('//*[@id="jddTable"]/tbody/tr/td[4]/div/div/a[1]')
 
     # Wait until the tick icon is displayed
-    wait = WebDriverWait(driver, 20).until(
+    wait = WebDriverWait(driver, 50).until(
     EC.presence_of_element_located((By.XPATH, '//*[@id="jddTable"]/tbody/tr/td[6]/div/div[3]/span')))
 
     # find the publish button

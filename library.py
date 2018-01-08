@@ -110,6 +110,7 @@ def checkImport (driver, url_my_dataset) :
     # publish = driver.find_element_by_xpath('//*[@id="jddTable"]/tbody/tr/td[4]/div/div/a[1]')
 
     # Wait until the tick icon is displayed
+    # Note that timeout can deffer between dailybuild and others env
     wait = WebDriverWait(driver, 50).until(
     EC.presence_of_element_located((By.XPATH, '//*[@id="jddTable"]/tbody/tr/td[6]/div/div[3]/span')))
 

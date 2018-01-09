@@ -23,9 +23,6 @@ def login (driver, region):
     password.send_keys(credentials.USER_CREDENTIALS['password'])
     submit.click()
 
-    #wait = WebDriverWait(driver, 5)
-    #wait.until(EC.url_changes(config.URL_PLATFORM ['base_url'] + region))
-
     # Check if we are connected to the app
     try:
         driver.get (config.URL_PLATFORM ['base_url'] + region + config.URL_PLATFORM ['user'])
